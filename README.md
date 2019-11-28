@@ -10,5 +10,9 @@ snapshotanalyzer uses the configuration file created by AWS CLI. e.g:
 `aws configure --profile snapshotanalyzer`
 
 # Running
+# Command given via command line to list, start or stop instances
 
-`pipenv run python snapshotanalyzer_profile/snapshotanalyzer.py`
+`pipenv run python snapshotanalyzer_profile/snapshotanalyzer.py <command>
+<--project=PROJECT>`
+*command* is list, start, stop
+*project* is optional
