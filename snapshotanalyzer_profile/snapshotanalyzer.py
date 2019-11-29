@@ -15,6 +15,11 @@ def filter_instances(project):
         instances = ec2.instances.all()
     return instances
 
+def has_pending_snapshot(volume):
+    snapshots = list(volume.snapshots.all())
+    return snapshots and snapshots[0].state == 'pending'
+
+
 @click.group()
 def cli():
     "snapshotanalyzer to manage snapshots"
@@ -129,14 +134,18 @@ def create_snapshots(project):
         i.wait_until_stopped()
 
         for v in i.volumes.all():
-            print("Creating snapshots of {0}".format(v.id))
-            v.create_snapshot(Description="""Created by snapshotanalyzer
-            python script""")
+            if has_pending_snapshot(v):
+                print("Skipping {0}, snapshot already in progress".format(v.id))
+                continue
+            else:
+                print("Creating snapshots of {0}".format(v.id))
+                v.create_snapshot(Description="""Created by snapshotanalyzer
+                python script""")
 
-            print("Starting {0}...".format(i.id))
+        print("Starting {0}...".format(i.id))
 
-            i.start()
-            i.wait_until_running()
+        i.start()
+        i.wait_until_running()
 
     print("Job completed")
     return
