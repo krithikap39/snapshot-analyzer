@@ -13,6 +13,7 @@ snapshotanalyzer uses the configuration file created by AWS CLI. e.g:
 # Command given via command line to list, start or stop instances
 
 `pipenv run python snapshotanalyzer_profile/snapshotanalyzer.py <command>
-<--project=PROJECT>`
-*command* is list, start, stop
+<sub-command> <--project=PROJECT>`
+*command* is instances, volumes, snapshots
+*sub-command* - depends on command
 *project* is optional
